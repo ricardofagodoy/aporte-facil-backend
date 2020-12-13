@@ -1,5 +1,7 @@
 package com.aportefacil.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Ativo {
 
     private String ticker;
@@ -25,5 +27,12 @@ public class Ativo {
 
     public void setCotacao(Double cotacao) {
         this.cotacao = cotacao;
+    }
+
+    @JsonIgnore
+    public boolean isValid() {
+        return !ticker.isBlank()
+                && quantidade >= 0
+                && peso >= 0;
     }
 }

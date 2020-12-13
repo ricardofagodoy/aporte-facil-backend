@@ -1,4 +1,4 @@
-package com.aportefacil.backend.controllers;
+package com.aportefacil.backend.controllers.dto;
 
 public class ErrorResponse {
 

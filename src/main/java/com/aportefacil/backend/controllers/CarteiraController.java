@@ -1,5 +1,6 @@
 package com.aportefacil.backend.controllers;
 
+import com.aportefacil.backend.controllers.dto.ErrorResponse;
 import com.aportefacil.backend.model.Carteira;
 import com.aportefacil.backend.services.CarteiraService;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,11 @@ public class CarteiraController {
     @RequestMapping(value = "carteira/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<?> setCarteira(@PathVariable("id") String id, @RequestBody Carteira carteira) {
 
-        this.carteiraService.updateCarteira(id, carteira);
+        try {
+            this.carteiraService.updateCarteira(id, carteira);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        }
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
