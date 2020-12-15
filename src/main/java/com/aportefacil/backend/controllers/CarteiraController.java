@@ -3,40 +3,44 @@ package com.aportefacil.backend.controllers;
 import com.aportefacil.backend.controllers.dto.ErrorResponse;
 import com.aportefacil.backend.model.Carteira;
 import com.aportefacil.backend.services.CarteiraService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
+import javax.servlet.http.HttpSession;
 
 @RestController
 public class CarteiraController {
 
     private final CarteiraService carteiraService;
+    private final String loggedField;
 
-    public CarteiraController(CarteiraService carteiraService) {
+    public CarteiraController(CarteiraService carteiraService,
+                              @Value("${logged.field}") String loggedField) {
         this.carteiraService = carteiraService;
+        this.loggedField = loggedField;
     }
 
-    @RequestMapping("carteira/{id}")
-    public ResponseEntity<Object> getCarteira(@PathVariable("id") String id) {
+    @RequestMapping("/carteira")
+    public ResponseEntity<Object> getCarteira(HttpSession session) {
 
-        Optional<Carteira> carteira = this.carteiraService.getCarteira(id);
+        String id = (String) session.getAttribute(loggedField);
 
-        if (carteira.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Carteira not found"));
-
-        return ResponseEntity.ok(carteira.get());
+        return ResponseEntity.ok(this.carteiraService.getCarteira(id));
     }
 
-    @RequestMapping(value = "carteira/{id}", method = RequestMethod.PATCH)
-    public ResponseEntity<?> setCarteira(@PathVariable("id") String id, @RequestBody Carteira carteira) {
+    @RequestMapping(value = "/carteira", method = RequestMethod.PATCH)
+    public ResponseEntity<Object> setCarteira(HttpSession session, @RequestBody Carteira carteira) {
+
+        String id = (String) session.getAttribute(loggedField);
+        Carteira carteiraBalanceada;
 
         try {
-            this.carteiraService.updateCarteira(id, carteira);
+            carteiraBalanceada = this.carteiraService.updateCarteira(id, carteira);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         }
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.ok(carteiraBalanceada);
     }
 }

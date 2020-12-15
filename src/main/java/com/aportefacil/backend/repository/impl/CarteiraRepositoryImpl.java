@@ -36,18 +36,7 @@ public class CarteiraRepositoryImpl implements CarteiraRepository {
 
     @Override
     public void updateCarteira(String id, Carteira carteira) {
-
-        try {
-            DocumentSnapshot document = this.fetchCarteira(id);
-
-            if (!document.exists())
-                throw new RuntimeException("Carteira " + id + " does not exist");
-
-            document.getReference().set(carteira).get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        this.collection.document(id).set(carteira);
     }
 
     private DocumentSnapshot fetchCarteira(String id) throws Exception {

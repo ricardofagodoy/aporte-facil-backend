@@ -5,7 +5,6 @@ import com.aportefacil.backend.repository.CarteiraRepository;
 import com.aportefacil.backend.repository.CotacaoRepository;
 import com.aportefacil.backend.services.CarteiraService;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 @Service
 public class CarteiraServiceImpl implements CarteiraService {
@@ -20,28 +19,36 @@ public class CarteiraServiceImpl implements CarteiraService {
     }
 
     @Override
-    public Optional<Carteira> getCarteira(String id) {
+    public Carteira getCarteira(String id) {
 
-        Optional<Carteira> carteira = this.carteiraRepository.getCarteira(id);
+        Carteira carteira = this.carteiraRepository.getCarteira(id).orElse(new Carteira());
 
-        // Atualizar cotações da carteira
-        carteira.ifPresent(
-                c -> c.getAtivos().forEach(
-                        a -> a.setCotacao(this.cotacaoRepository.getCotacao(a.getTicker()))
-                ));
-
-        // TODO: Calcula os pesos e ações a serem tomadas
-        // ...
+        // Balanceia pesos e cotações
+        this.balance(carteira);
 
         return carteira;
     }
 
     @Override
-    public void updateCarteira(String id, Carteira carteira) {
+    public Carteira updateCarteira(String id, Carteira carteira) {
 
         if (!carteira.isValid())
             throw new RuntimeException("Carteira has invalid information");
 
         this.carteiraRepository.updateCarteira(id, carteira);
+
+        // Balanceia pesos e cotações
+        this.balance(carteira);
+
+        return carteira;
+    }
+
+    private void balance(Carteira carteira) {
+
+        // Atualizar cotações da carteira
+        carteira.getAtivos().forEach(a -> a.setCotacao(this.cotacaoRepository.getCotacao(a.getTicker())));
+
+        // Balanceia os ativos com base no saldo disponivel
+        carteira.balance();
     }
 }
