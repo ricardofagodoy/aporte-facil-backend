@@ -30,7 +30,7 @@ class CarteiraTest {
         assertEquals(result.get("A").getPeso(), 1);
 
         assertEquals(result.get("B").getAcao(), 73);
-        assertEquals(String.format("%.02f", result.get("B").getDesbalanco()), "7366.67");
+        assertEquals(String.format("%.02f", result.get("B").getDesbalanco()), "7266.67");
         assertEquals(result.get("B").getPeso(), 2);
     }
 
@@ -68,7 +68,7 @@ class CarteiraTest {
         assertEquals(result.get("A").getDesbalanco(), 250);
 
         assertEquals(result.get("B").getAcao(), 16);
-        assertEquals(result.get("B").getDesbalanco(), 800);
+        assertEquals(result.get("B").getDesbalanco(), 750);
     }
 
     @Test
@@ -89,7 +89,7 @@ class CarteiraTest {
         assertEquals(result.get("A").getDesbalanco(), -125);
 
         assertEquals(result.get("B").getAcao(), 20);
-        assertEquals(result.get("B").getDesbalanco(), 1000);
+        assertEquals(result.get("B").getDesbalanco(), 1125);
     }
 
     @Test
@@ -111,10 +111,60 @@ class CarteiraTest {
         assertEquals(String.format("%.02f", result.get("A").getDesbalanco()), "-3058.33");
 
         assertEquals(result.get("B").getAcao(), 16);
-        assertEquals(result.get("B").getDesbalanco(), 2510);
+        assertEquals(String.format("%.02f", result.get("B").getDesbalanco()), "3733.33");
 
         assertEquals(result.get("C").getAcao(), 15);
-        assertEquals(result.get("C").getDesbalanco(), 3190);
+        assertEquals(result.get("C").getDesbalanco(), 4825);
+    }
+
+    @Test
+    void testBalanceDifPesosNegativosComplexo2() {
+
+        // Arrange
+        Carteira carteira = new Carteira(500.0, Arrays.asList(
+                new Ativo("A", 1, 4d, 10d), // 10 (400)   d: 390 a: 39 / (370) d: 360
+                new Ativo("B", 13, 2d, 20d), // 260 (200) d: -60 a: 0 / --
+                new Ativo("C", 10, 4d, 23d) // 230 (400)  d: 170 a: 7 / (370) d: 140
+        )); // total: 1000 / 740
+
+        // Act
+        carteira.balance();
+        Map<String, Ativo> result = dict(carteira);
+
+        // Assert
+        assertEquals(result.get("A").getAcao(), 36);
+        assertEquals(String.format("%.02f", result.get("A").getDesbalanco()), "390.00");
+
+        assertEquals(result.get("B").getAcao(), 0);
+        assertEquals(String.format("%.02f", result.get("B").getDesbalanco()), "-60.00");
+
+        assertEquals(result.get("C").getAcao(), 6);
+        assertEquals(result.get("C").getDesbalanco(), 170);
+    }
+
+    @Test
+    void testBalanceDifPesosNegativosComplexo3() {
+
+        // Arrange
+        Carteira carteira = new Carteira(511.0, Arrays.asList(
+                new Ativo("A", 1, 4d, 10d), // 10 (404.40)   d: 394.40 a: 39 / (375.50) d: 365.50
+                new Ativo("B", 13, 2d, 20d), // 260 (202,20) d: -57.80 a: 0 / --
+                new Ativo("C", 10, 4d, 23d) // 230 (404,40)  d: 174.40 a: 7 / (375.50) d: 145.50
+        )); // total: 1011 / 751 / 360 + 138 = 498, 511 - 498 = 13 saldo restante, compra mais um do ativo A, subindo para 37 a acao
+
+        // Act
+        carteira.balance();
+        Map<String, Ativo> result = dict(carteira);
+
+        // Assert
+        assertEquals(result.get("A").getAcao(), 37);
+        assertEquals(String.format("%.02f", result.get("A").getDesbalanco()), "394.40");
+
+        assertEquals(result.get("B").getAcao(), 0);
+        assertEquals(String.format("%.02f", result.get("B").getDesbalanco()), "-57.80");
+
+        assertEquals(result.get("C").getAcao(), 6);
+        assertEquals(String.format("%.02f", result.get("C").getDesbalanco()), "174.40");
     }
 
     private Map<String, Ativo> dict(Carteira carteira) {

@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="BackendApplication" type="Application" factoryName="Application" nameIsGenerated="true">
+    <envs>
+      <env name="GOOGLE_APPLICATION_CREDENTIALS" value="$PROJECT_DIR$/service-account.json" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.aportefacil.backend.BackendApplication" />
+    <module name="backend.main" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

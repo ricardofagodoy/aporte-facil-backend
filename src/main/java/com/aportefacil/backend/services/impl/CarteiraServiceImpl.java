@@ -35,10 +35,10 @@ public class CarteiraServiceImpl implements CarteiraService {
         if (!carteira.isValid())
             throw new RuntimeException("Carteira has invalid information");
 
-        this.carteiraRepository.updateCarteira(id, carteira);
-
         // Balanceia pesos e cotações
         this.balance(carteira);
+
+        this.carteiraRepository.updateCarteira(id, carteira);
 
         return carteira;
     }

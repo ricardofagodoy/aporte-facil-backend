@@ -28,7 +28,7 @@ public class Ativo {
     }
 
     public Ativo(String ticker, Integer quantidade, Double peso, Double cotacao) {
-        this(ticker, quantidade, peso, cotacao, 0d, 0);
+        this(ticker, quantidade, peso, cotacao, null, null);
     }
 
     public String getTicker() {

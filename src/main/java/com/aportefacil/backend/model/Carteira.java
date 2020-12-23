@@ -57,15 +57,24 @@ public class Carteira {
         // Merge duplicates
         ativos = this.mergeDuplicates(ativos);
 
-        // Firstly, balance all ativos
-        this.balance(ativos);
+        // Tenta balancear até não ter mais negativos
+        int quantosPositivos;
+        List<Ativo> positiveActions = ativos;
 
-        // Need to rebalance those with buy orders
-        List<Ativo> positiveActions = ativos.stream()
-                .filter(a -> a.getDesbalanco() > 0)
-                .collect(Collectors.toList());
+        // Zera desbalanco
+        ativos.forEach(a -> a.setDesbalanco(null));
 
-        this.balance(positiveActions);
+        do {
+            quantosPositivos = positiveActions.size();
+
+            // Need to rebalance those with buy orders
+            this.balance(positiveActions);
+
+            positiveActions = positiveActions.stream()
+                    .filter(a -> a.getAcao() > 0)
+                    .collect(Collectors.toList());
+
+        } while (quantosPositivos != positiveActions.size());
 
         // Saldo restante após compras
         Double saldoRestante = positiveActions.stream()
@@ -74,10 +83,7 @@ public class Carteira {
 
         // Sort all buy actions by how close it is to be purchased
         List<Ativo> positiveActionsSorted = positiveActions.stream()
-                .sorted((a, b) -> Double.compare(
-                        b.getDesbalanco() / b.getCotacao() - b.getAcao(),
-                        a.getDesbalanco() / a.getCotacao() - a.getAcao()
-                ))
+                .sorted((a, b) -> Double.compare(b.getDesbalanco(), a.getDesbalanco()))
                 .collect(Collectors.toList());
 
         // Usa saldo restante para comprar ativos possíveis
@@ -85,7 +91,7 @@ public class Carteira {
             if (a.getCotacao() <= saldoRestante) {
                 int quantosComprar = (int) (saldoRestante / a.getCotacao());
                 a.setAcao(a.getAcao() + quantosComprar);
-                a.setDesbalanco(a.getDesbalanco() + a.getCotacao() * quantosComprar);
+                //a.setDesbalanco(a.getDesbalanco() + a.getCotacao() * quantosComprar);
 
                 saldoRestante -= a.getCotacao() * quantosComprar;
             }
@@ -137,7 +143,9 @@ public class Carteira {
             double valorDesbalanco = valorIdeal - valorAtual;
 
             // Set desired values
-            a.setDesbalanco(valorDesbalanco);
+            if (a.getDesbalanco() == null)
+                a.setDesbalanco(valorDesbalanco);
+
             a.setAcao((int) Math.max((valorDesbalanco / a.getCotacao()), 0));
         }
     }
