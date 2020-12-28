@@ -1,3 +1,13 @@
+buildscript {    // Configuration for building
+	repositories {
+		jcenter()    // Bintray's repository - a fast Maven Central mirror & more
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.2.0' // If a newer version is available, use it
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.4.0'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
@@ -16,10 +26,19 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.google.cloud:google-cloud-firestore:1.32.0'
 	implementation 'com.google.api-client:google-api-client:1.30.10'
-
+    
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+}
+
+apply plugin: 'com.google.cloud.tools.appengine'
+
+appengine {  // App Engine tasks configuration
+    deploy {   // deploy configuration
+        projectId = 'GCLOUD_CONFIG' // gcloud config set project
+        version = 'GCLOUD_CONFIG'   // gcloud to generate a version
+    }
 }
 
 test {
