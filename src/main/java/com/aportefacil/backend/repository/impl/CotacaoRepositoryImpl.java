@@ -1,5 +1,6 @@
 package com.aportefacil.backend.repository.impl;
 
+import com.aportefacil.backend.model.InfoAtivo;
 import com.aportefacil.backend.repository.CotacaoRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,7 +16,7 @@ public class CotacaoRepositoryImpl implements CotacaoRepository {
 
     private final String cotacoesAcoesUrl;
     private final String cotacoesFiisUrl;
-    private final Map<String, Double> cotacoes;
+    private final Map<String, InfoAtivo> cotacoes;
 
     public CotacaoRepositoryImpl(@Value("${cotacoes.acoes.url}") String cotacoesAcoesUrl,
                                  @Value("${cotacoes.fiis.url}") String cotacoesFiisUrl) {
@@ -29,8 +30,8 @@ public class CotacaoRepositoryImpl implements CotacaoRepository {
     }
 
     @Override
-    public Double getCotacao(String ticker) {
-        return this.cotacoes.getOrDefault(ticker, 0.0);
+    public InfoAtivo getInfoAtivo(String ticker) {
+        return this.cotacoes.getOrDefault(ticker, null);
     }
 
     @Override
@@ -41,18 +42,24 @@ public class CotacaoRepositoryImpl implements CotacaoRepository {
     @Scheduled(cron = "0 */15 10-17 * * MON-FRI")
     private void updateCotacoesAcoes() {
         System.out.println("Updating cotacoes acoes at " + new SimpleDateFormat("dd/MM HH:mm:ss").format(new Date()));
-        this.callApi(this.cotacoesAcoesUrl);
+        List<String> lines = this.callApi(this.cotacoesAcoesUrl);
+
+        lines.forEach(this::processAcaoLine);
     }
 
     @Scheduled(cron = "0 */15 10-17 * * MON-FRI")
     private void updateCotacoesFiis() {
         System.out.println("Updating cotacoes FIIs at " + new SimpleDateFormat("dd/MM HH:mm:ss").format(new Date()));
-        this.callApi(this.cotacoesFiisUrl);
+        List<String> lines = this.callApi(this.cotacoesFiisUrl);
+
+        lines.forEach(this::processFIILine);
     }
 
-    private void callApi(String url) {
+    private List<String> callApi(String url) {
 
         Scanner input = null;
+
+        List<String> resultLines = new ArrayList<>();
 
         try {
             URL rowdata = new URL(url);
@@ -66,8 +73,9 @@ public class CotacaoRepositoryImpl implements CotacaoRepository {
             if (input.hasNext())
                 input.nextLine();
 
-            while (input.hasNextLine())
-                processCotacaoLine(input.nextLine());
+            while (input.hasNextLine()) {
+                resultLines.add(input.nextLine());
+            }
 
         } catch (Exception e) {
             System.out.print(e.getMessage());
@@ -75,17 +83,48 @@ public class CotacaoRepositoryImpl implements CotacaoRepository {
             if (input != null)
                 input.close();
         }
+
+        return resultLines;
     }
 
-    private void processCotacaoLine(String line) {
+    private void processAcaoLine(String line) {
 
         try {
             NumberFormat format = NumberFormat.getInstance(Locale.forLanguageTag("pt"));
 
             String[] tokens = line.split(";");
 
-            if (tokens.length > 1)
-                this.cotacoes.put(tokens[0], format.parse(tokens[1]).doubleValue());
+            if (tokens.length > 1) {
+                String ticker = tokens[0];
+                String cotacao = tokens[1];
+                String dy = tokens[3].isBlank() ? "0,00" : tokens[3];
+                String pvp = tokens[4].isBlank() ? "0,00" : tokens[4];
+
+                this.cotacoes.put(ticker, new InfoAtivo(format.parse(cotacao).doubleValue(),
+                        format.parse(dy).doubleValue(), format.parse(pvp).doubleValue()));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void processFIILine(String line) {
+
+        try {
+            NumberFormat format = NumberFormat.getInstance(Locale.forLanguageTag("pt"));
+
+            String[] tokens = line.split(";");
+
+            if (tokens.length > 1) {
+                String ticker = tokens[0];
+                String cotacao = tokens[1];
+                String dy = tokens[2].isBlank() ? "0,00" : tokens[2];
+                String pvp = tokens[3].isBlank() ? "0,00" : tokens[3];
+
+                this.cotacoes.put(ticker, new InfoAtivo(format.parse(cotacao).doubleValue(),
+                        format.parse(dy).doubleValue(), format.parse(pvp).doubleValue()));
+            }
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

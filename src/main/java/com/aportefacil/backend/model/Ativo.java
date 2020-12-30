@@ -11,24 +11,24 @@ public class Ativo {
     private String ticker;
     private Integer quantidade;
     private Double peso;
-    private Double cotacao;
+    private InfoAtivo infoAtivo;
     private Double desbalanco;
     private Integer acao;
 
     public Ativo() {}
 
-    public Ativo(String ticker, Integer quantidade, Double peso, Double cotacao,
+    public Ativo(String ticker, Integer quantidade, Double peso, InfoAtivo infoAtivo,
                  Double desbalanco, Integer acao) {
         this.ticker = ticker;
         this.quantidade = quantidade;
         this.peso = peso;
-        this.cotacao = cotacao;
+        this.infoAtivo = infoAtivo;
         this.desbalanco = desbalanco;
         this.acao = acao;
     }
 
-    public Ativo(String ticker, Integer quantidade, Double peso, Double cotacao) {
-        this(ticker, quantidade, peso, cotacao, null, null);
+    public Ativo(String ticker, Integer quantidade, Double peso, InfoAtivo infoAtivo) {
+        this(ticker, quantidade, peso, infoAtivo, null, null);
     }
 
     public String getTicker() {
@@ -43,8 +43,8 @@ public class Ativo {
         return peso;
     }
 
-    public void setCotacao(Double cotacao) {
-        this.cotacao = cotacao;
+    public void setInfoAtivo(InfoAtivo infoAtivo) {
+        this.infoAtivo = infoAtivo;
     }
 
     public void setAcao(Integer acao) {
@@ -56,8 +56,8 @@ public class Ativo {
     }
 
     @Exclude
-    public Double getCotacao() {
-        return cotacao;
+    public InfoAtivo getInfoAtivo() {
+        return infoAtivo;
     }
 
     @Exclude

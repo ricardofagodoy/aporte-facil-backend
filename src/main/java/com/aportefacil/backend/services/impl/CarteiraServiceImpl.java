@@ -46,7 +46,7 @@ public class CarteiraServiceImpl implements CarteiraService {
     private void balance(Carteira carteira) {
 
         // Atualizar cotações da carteira
-        carteira.getAtivos().forEach(a -> a.setCotacao(this.cotacaoRepository.getCotacao(a.getTicker())));
+        carteira.getAtivos().forEach(a -> a.setInfoAtivo(this.cotacaoRepository.getInfoAtivo(a.getTicker())));
 
         // Balanceia os ativos com base no saldo disponivel
         carteira.balance();

@@ -78,7 +78,7 @@ public class Carteira {
 
         // Saldo restante após compras
         Double saldoRestante = positiveActions.stream()
-                .map(a -> a.getAcao() * a.getCotacao())
+                .map(a -> a.getAcao() * a.getInfoAtivo().getCotacao())
                 .reduce(saldo, (restante, valor) -> restante - valor);
 
         // Sort all buy actions by how close it is to be purchased
@@ -88,17 +88,17 @@ public class Carteira {
 
         // Usa saldo restante para comprar ativos possíveis
         for (Ativo a : positiveActionsSorted) {
-            if (a.getCotacao() <= saldoRestante) {
-                int quantosComprar = (int) (saldoRestante / a.getCotacao());
+            if (a.getInfoAtivo().getCotacao() <= saldoRestante) {
+                int quantosComprar = (int) (saldoRestante / a.getInfoAtivo().getCotacao());
                 a.setAcao(a.getAcao() + quantosComprar);
                 //a.setDesbalanco(a.getDesbalanco() + a.getCotacao() * quantosComprar);
 
-                saldoRestante -= a.getCotacao() * quantosComprar;
+                saldoRestante -= a.getInfoAtivo().getCotacao() * quantosComprar;
             }
         }
 
         // Return sorted by biggest value to buy
-        this.ativos.sort((a, b) -> Double.compare(b.getAcao() * b.getCotacao(), a.getAcao() * a.getCotacao()));
+        this.ativos.sort((a, b) -> Double.compare(b.getAcao() * b.getInfoAtivo().getCotacao(), a.getAcao() * a.getInfoAtivo().getCotacao()));
     }
 
     private List<Ativo> mergeDuplicates(List<Ativo> ativos) {
@@ -132,21 +132,21 @@ public class Carteira {
 
         for (Ativo a : ativos) {
             somaPesos += a.getPeso();
-            somaValores += a.getQuantidade() * a.getCotacao();
+            somaValores += a.getQuantidade() * a.getInfoAtivo().getCotacao();
         }
 
         // Balance all ativos
         for (Ativo a : ativos) {
 
             double valorIdeal = (somaValores + saldo) * (a.getPeso() / somaPesos);
-            double valorAtual = a.getQuantidade() * a.getCotacao();
+            double valorAtual = a.getQuantidade() * a.getInfoAtivo().getCotacao();
             double valorDesbalanco = valorIdeal - valorAtual;
 
             // Set desired values
             if (a.getDesbalanco() == null)
                 a.setDesbalanco(valorDesbalanco);
 
-            a.setAcao((int) Math.max((valorDesbalanco / a.getCotacao()), 0));
+            a.setAcao((int) Math.max((valorDesbalanco / a.getInfoAtivo().getCotacao()), 0));
         }
     }
 }
