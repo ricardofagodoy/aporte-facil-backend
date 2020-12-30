@@ -38,13 +38,13 @@ public class CotacaoRepositoryImpl implements CotacaoRepository {
         return this.cotacoes.keySet();
     }
 
-    @Scheduled(cron = "* */15 10-17 * * MON-FRI")
+    @Scheduled(cron = "0 */15 10-17 * * MON-FRI")
     private void updateCotacoesAcoes() {
         System.out.println("Updating cotacoes acoes at " + new SimpleDateFormat("dd/MM HH:mm:ss").format(new Date()));
         this.callApi(this.cotacoesAcoesUrl);
     }
 
-    @Scheduled(cron = "* */15 10-17 * * MON-FRI")
+    @Scheduled(cron = "0 */15 10-17 * * MON-FRI")
     private void updateCotacoesFiis() {
         System.out.println("Updating cotacoes FIIs at " + new SimpleDateFormat("dd/MM HH:mm:ss").format(new Date()));
         this.callApi(this.cotacoesFiisUrl);
