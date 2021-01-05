@@ -14,21 +14,23 @@ public class Ativo {
     private InfoAtivo infoAtivo;
     private Double desbalanco;
     private Integer acao;
+    private boolean quarentena;
 
     public Ativo() {}
 
     public Ativo(String ticker, Integer quantidade, Double peso, InfoAtivo infoAtivo,
-                 Double desbalanco, Integer acao) {
+                 Double desbalanco, Integer acao, boolean quarentena) {
         this.ticker = ticker;
         this.quantidade = quantidade;
         this.peso = peso;
         this.infoAtivo = infoAtivo;
         this.desbalanco = desbalanco;
         this.acao = acao;
+        this.quarentena = quarentena;
     }
 
     public Ativo(String ticker, Integer quantidade, Double peso, InfoAtivo infoAtivo) {
-        this(ticker, quantidade, peso, infoAtivo, null, null);
+        this(ticker, quantidade, peso, infoAtivo, null, null, false);
     }
 
     public String getTicker() {
@@ -70,19 +72,28 @@ public class Ativo {
         return desbalanco;
     }
 
+    public boolean isQuarentena() {
+        return quarentena;
+    }
+
+    public void setQuarentena(boolean quarentena) {
+        this.quarentena = quarentena;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ativo ativo = (Ativo) o;
-        return ticker.equals(ativo.ticker)
-                && quantidade.equals(ativo.quantidade)
-                && peso.equals(ativo.peso);
+        return Objects.equals(ticker, ativo.ticker) && Objects.equals(quantidade, ativo.quantidade)
+                && Objects.equals(peso, ativo.peso) && Objects.equals(infoAtivo, ativo.infoAtivo) &&
+                Objects.equals(desbalanco, ativo.desbalanco) && Objects.equals(acao, ativo.acao)
+                && Objects.equals(quarentena, ativo.quantidade);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ticker, quantidade, peso);
+        return Objects.hash(ticker, quantidade, peso, infoAtivo, desbalanco, acao, quarentena);
     }
 
     @Exclude

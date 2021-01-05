@@ -59,12 +59,12 @@ public class Carteira {
 
         // Tenta balancear até não ter mais negativos
         int quantosPositivos;
-        List<Ativo> positiveActions = ativos;
+        List<Ativo> positiveActions = ativos.stream().filter(a -> !a.isQuarentena()).collect(Collectors.toList());
 
         // Zera desbalanco
-        ativos.forEach(a -> a.setDesbalanco(null));
+        ativos.forEach(a -> { a.setDesbalanco(null); a.setAcao(0);});
 
-        do {
+        do {    
             quantosPositivos = positiveActions.size();
 
             // Need to rebalance those with buy orders
