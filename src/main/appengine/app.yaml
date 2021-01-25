@@ -6,3 +6,5 @@ env_variables:
 
 automatic_scaling:
   max_instances: 1
+
+instance_class: F4_1G
