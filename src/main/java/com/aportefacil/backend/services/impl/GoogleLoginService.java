@@ -33,7 +33,7 @@ public class GoogleLoginService implements LoginService {
 
                 Payload payload = idToken.getPayload();
 
-                String userId = payload.getSubject();
+                String userId = payload.getEmail(); //payload.getSubject();
                 String name = (String) payload.get("name");
 
                 return new User(userId, name.split(" ")[0]);

@@ -7,13 +7,12 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-@Repository
-public class CarteiraRepositoryImpl implements CarteiraRepository {
+@Repository("Persistent")
+public class CarteiraFirestoreRepository implements CarteiraRepository {
 
-    private final int TIMEOUT_SECONDS = 5;
     private final CollectionReference collection;
 
-    public CarteiraRepositoryImpl(Firestore firestore) {
+    public CarteiraFirestoreRepository(Firestore firestore) {
         this.collection = firestore.collection("carteiras");
     }
 
@@ -40,6 +39,6 @@ public class CarteiraRepositoryImpl implements CarteiraRepository {
     }
 
     private DocumentSnapshot fetchCarteira(String id) throws Exception {
-        return this.collection.document(id).get().get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        return this.collection.document(id).get().get(5, TimeUnit.SECONDS);
     }
 }

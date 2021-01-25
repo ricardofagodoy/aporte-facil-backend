@@ -97,7 +97,7 @@ public class CotacaoRepositoryImpl implements CotacaoRepository {
             if (tokens.length > 1) {
                 String ticker = tokens[0];
                 String cotacao = tokens[1];
-                String dy = tokens[3].isBlank() ? "0,00" : tokens[3];
+                String dy = tokens[2].isBlank() ? "0,00" : tokens[2];
                 String pvp = tokens[4].isBlank() ? "0,00" : tokens[4];
 
                 this.cotacoes.put(ticker, new InfoAtivo(format.parse(cotacao).doubleValue(),
