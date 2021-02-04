@@ -3,6 +3,7 @@ package com.aportefacil.backend.services.impl;
 import com.aportefacil.backend.model.Carteira;
 import com.aportefacil.backend.repository.CarteiraRepository;
 import com.aportefacil.backend.repository.CotacaoRepository;
+import com.aportefacil.backend.repository.TaxaTesouroRepository;
 import com.aportefacil.backend.services.CarteiraService;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +12,14 @@ public class CarteiraServiceImpl implements CarteiraService {
 
     private final CarteiraRepository carteiraRepository;
     private final CotacaoRepository cotacaoRepository;
+    private final TaxaTesouroRepository taxaTesouroRepository;
 
     public CarteiraServiceImpl(CarteiraRepository carteiraRepository,
-                               CotacaoRepository cotacaoRepository) {
+                               CotacaoRepository cotacaoRepository,
+                               TaxaTesouroRepository taxaTesouroRepository) {
         this.carteiraRepository = carteiraRepository;
         this.cotacaoRepository = cotacaoRepository;
+        this.taxaTesouroRepository = taxaTesouroRepository;
     }
 
     @Override
@@ -47,6 +51,9 @@ public class CarteiraServiceImpl implements CarteiraService {
 
         // Atualizar cotações da carteira
         carteira.getAtivos().forEach(a -> a.setInfoAtivo(this.cotacaoRepository.getInfoAtivo(a.getTicker())));
+
+        // Carrega taxa tesouro IPCA no retorno da carteira
+        carteira.setTaxaIpca(this.taxaTesouroRepository.getTaxaIpca());
 
         // Balanceia os ativos com base no saldo disponivel
         carteira.balance();

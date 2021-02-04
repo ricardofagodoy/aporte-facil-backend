@@ -14,6 +14,7 @@ public class Carteira {
 
     private Double saldo;
     private List<Ativo> ativos;
+    private Double taxaIpca;
 
     public Carteira() {
         this.saldo = 0.0;
@@ -31,6 +32,14 @@ public class Carteira {
 
     public List<Ativo> getAtivos() {
         return ativos;
+    }
+
+    public Double getTaxaIpca() {
+        return taxaIpca;
+    }
+
+    public void setTaxaIpca(Double taxaIpca) {
+        this.taxaIpca = taxaIpca;
     }
 
     @Exclude

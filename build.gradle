@@ -26,6 +26,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.google.cloud:google-cloud-firestore:1.32.0'
 	implementation 'com.google.api-client:google-api-client:1.30.10'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
     
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
