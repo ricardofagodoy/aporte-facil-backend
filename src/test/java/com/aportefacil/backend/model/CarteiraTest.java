@@ -13,11 +13,11 @@ class CarteiraTest {
     void testBalanceMergeDuplicates() {
 
         Carteira carteira = new Carteira(10000.0, Arrays.asList(
-                new Ativo("A", 3, 1d, new InfoAtivo(100d, null, null)),
-                new Ativo("A", 4, 1d, new InfoAtivo(100d, null, null)),
-                new Ativo("B", 0, 1d, new InfoAtivo(100d, null, null)),
-                new Ativo("B", 0, 2d, new InfoAtivo(100d, null, null)),
-                new Ativo("A", 2, 1d, new InfoAtivo(100d, null, null))
+                new Ativo("A", 3, 1d, new InfoAtivo(100d, null, null, null, null)),
+                new Ativo("A", 4, 1d, new InfoAtivo(100d, null, null, null, null)),
+                new Ativo("B", 0, 1d, new InfoAtivo(100d, null, null, null, null)),
+                new Ativo("B", 0, 2d, new InfoAtivo(100d, null, null, null, null)),
+                new Ativo("A", 2, 1d, new InfoAtivo(100d, null, null, null, null))
         ));
 
         // Act
@@ -38,15 +38,15 @@ class CarteiraTest {
     void testBalanceSimple() {
 
         Carteira carteira = new Carteira(1000.0, Arrays.asList(
-                new Ativo("A", 0, 1d, new InfoAtivo(100d, null, null)),
-                new Ativo("B", 0, 1d, new InfoAtivo(100d, null, null))
+                new Ativo("A", 0, 1d, new InfoAtivo(100d, null, null, null, null)),
+                new Ativo("B", 0, 1d, new InfoAtivo(100d, null, null, null, null))
         ));
 
         carteira.balance();
 
         assertEquals(carteira, new Carteira(1000.0, Arrays.asList(
-                new Ativo("A", 0, 1d, new InfoAtivo(100d, null, null), 500d, 5, false),
-                new Ativo("B", 0, 1d, new InfoAtivo(100d, null, null), 500d, 5, false)
+                new Ativo("A", 0, 1d, new InfoAtivo(100d, null, null, null, null), 500d, 5, false),
+                new Ativo("B", 0, 1d, new InfoAtivo(100d, null, null, null, null), 500d, 5, false)
         )));
     }
 
@@ -55,8 +55,8 @@ class CarteiraTest {
 
         // Arrange
         Carteira carteira = new Carteira(1000.0, Arrays.asList(
-                new Ativo("A", 0, 1d, new InfoAtivo(100d, null, null)),
-                new Ativo("B", 0, 3d, new InfoAtivo(50d, null, null))
+                new Ativo("A", 0, 1d, new InfoAtivo(100d, null, null, null, null)),
+                new Ativo("B", 0, 3d, new InfoAtivo(50d, null, null, null, null))
         ));
 
         // Act
@@ -76,8 +76,8 @@ class CarteiraTest {
 
         // Arrange
         Carteira carteira = new Carteira(1000.0, Arrays.asList(
-                new Ativo("A", 5, 1d, new InfoAtivo(100d, null, null)),
-                new Ativo("B", 0, 3d, new InfoAtivo(50d, null, null))
+                new Ativo("A", 5, 1d, new InfoAtivo(100d, null, null, null, null)),
+                new Ativo("B", 0, 3d, new InfoAtivo(50d, null, null, null, null))
         ));
 
         // Act
@@ -97,9 +97,9 @@ class CarteiraTest {
 
         // Arrange
         Carteira carteira = new Carteira(5500.0, Arrays.asList(
-                new Ativo("A", 50, 1d, new InfoAtivo(100d, null, null)),
-                new Ativo("B", 1, 2d, new InfoAtivo(150d, null, null)),
-                new Ativo("C", 5, 3d, new InfoAtivo(200d, null, null))
+                new Ativo("A", 50, 1d, new InfoAtivo(100d, null, null, null, null)),
+                new Ativo("B", 1, 2d, new InfoAtivo(150d, null, null, null, null)),
+                new Ativo("C", 5, 3d, new InfoAtivo(200d, null, null, null, null))
         ));
 
         // Act
@@ -122,9 +122,9 @@ class CarteiraTest {
 
         // Arrange
         Carteira carteira = new Carteira(500.0, Arrays.asList(
-                new Ativo("A", 1, 4d, new InfoAtivo(10d, null, null)), // 10 (400)   d: 390 a: 39 / (370) d: 360
-                new Ativo("B", 13, 2d, new InfoAtivo(20d, null, null)), // 260 (200) d: -60 a: 0 / --
-                new Ativo("C", 10, 4d, new InfoAtivo(23d, null, null)) // 230 (400)  d: 170 a: 7 / (370) d: 140
+                new Ativo("A", 1, 4d, new InfoAtivo(10d, null, null, null, null)), // 10 (400)   d: 390 a: 39 / (370) d: 360
+                new Ativo("B", 13, 2d, new InfoAtivo(20d, null, null, null, null)), // 260 (200) d: -60 a: 0 / --
+                new Ativo("C", 10, 4d, new InfoAtivo(23d, null, null, null, null)) // 230 (400)  d: 170 a: 7 / (370) d: 140
         )); // total: 1000 / 740
 
         // Act
@@ -147,9 +147,9 @@ class CarteiraTest {
 
         // Arrange
         Carteira carteira = new Carteira(511.0, Arrays.asList(
-                new Ativo("A", 1, 4d, new InfoAtivo(10d, null, null)), // 10 (404.40)   d: 394.40 a: 39 / (375.50) d: 365.50
-                new Ativo("B", 13, 2d, new InfoAtivo(20d, null, null)), // 260 (202,20) d: -57.80 a: 0 / --
-                new Ativo("C", 10, 4d, new InfoAtivo(23d, null, null)) // 230 (404,40)  d: 174.40 a: 7 / (375.50) d: 145.50
+                new Ativo("A", 1, 4d, new InfoAtivo(10d, null, null, null, null)), // 10 (404.40)   d: 394.40 a: 39 / (375.50) d: 365.50
+                new Ativo("B", 13, 2d, new InfoAtivo(20d, null, null, null, null)), // 260 (202,20) d: -57.80 a: 0 / --
+                new Ativo("C", 10, 4d, new InfoAtivo(23d, null, null, null, null)) // 230 (404,40)  d: 174.40 a: 7 / (375.50) d: 145.50
         )); // total: 1011 / 751 / 360 + 138 = 498, 511 - 498 = 13 saldo restante, compra mais um do ativo A, subindo para 37 a acao
 
         // Act

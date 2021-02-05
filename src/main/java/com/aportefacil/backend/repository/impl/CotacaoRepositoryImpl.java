@@ -1,6 +1,7 @@
 package com.aportefacil.backend.repository.impl;
 
 import com.aportefacil.backend.model.InfoAtivo;
+import com.aportefacil.backend.model.TipoAtivo;
 import com.aportefacil.backend.repository.CotacaoRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -98,10 +99,10 @@ public class CotacaoRepositoryImpl implements CotacaoRepository {
                 String ticker = tokens[0];
                 String cotacao = tokens[1];
                 String dy = tokens[2].isBlank() ? "0,00" : tokens[2];
-                String pvp = tokens[4].isBlank() ? "0,00" : tokens[4];
+                String pl = tokens[4].isBlank() ? "0,00" : tokens[1];
 
                 this.cotacoes.put(ticker, new InfoAtivo(format.parse(cotacao).doubleValue(),
-                        format.parse(dy).doubleValue(), format.parse(pvp).doubleValue()));
+                        TipoAtivo.ACAO, format.parse(dy).doubleValue(), format.parse(pl).doubleValue(), null));
             }
 
         } catch (Exception e) {
@@ -123,7 +124,7 @@ public class CotacaoRepositoryImpl implements CotacaoRepository {
                 String pvp = tokens[3].isBlank() ? "0,00" : tokens[3];
 
                 this.cotacoes.put(ticker, new InfoAtivo(format.parse(cotacao).doubleValue(),
-                        format.parse(dy).doubleValue(), format.parse(pvp).doubleValue()));
+                        TipoAtivo.FII, format.parse(dy).doubleValue(), null, format.parse(pvp).doubleValue()));
             }
 
         } catch (Exception e) {

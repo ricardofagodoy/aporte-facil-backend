@@ -85,10 +85,10 @@ public class Ativo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ativo ativo = (Ativo) o;
-        return Objects.equals(ticker, ativo.ticker) && Objects.equals(quantidade, ativo.quantidade)
-                && Objects.equals(peso, ativo.peso) && Objects.equals(infoAtivo, ativo.infoAtivo) &&
-                Objects.equals(desbalanco, ativo.desbalanco) && Objects.equals(acao, ativo.acao)
-                && Objects.equals(quarentena, ativo.quantidade);
+        return quarentena == ativo.quarentena && Objects.equals(ticker, ativo.ticker)
+                && Objects.equals(quantidade, ativo.quantidade) && Objects.equals(peso, ativo.peso)
+                && Objects.equals(infoAtivo, ativo.infoAtivo) && Objects.equals(desbalanco, ativo.desbalanco)
+                && Objects.equals(acao, ativo.acao);
     }
 
     @Override
