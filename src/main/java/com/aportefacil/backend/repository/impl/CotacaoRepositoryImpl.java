@@ -99,10 +99,10 @@ public class CotacaoRepositoryImpl implements CotacaoRepository {
                 String ticker = tokens[0];
                 String cotacao = tokens[1];
                 String dy = tokens[2].isBlank() ? "0,00" : tokens[2];
-                String pl = tokens[4].isBlank() ? "0,00" : tokens[1];
+                String pl = tokens[3].isBlank() ? "0,00" : tokens[3];
 
                 this.cotacoes.put(ticker, new InfoAtivo(format.parse(cotacao).doubleValue(),
-                        TipoAtivo.ACAO, format.parse(dy).doubleValue(), format.parse(pl).doubleValue(), null));
+                        TipoAtivo.ACAO, null, format.parse(dy).doubleValue(), format.parse(pl).doubleValue()));
             }
 
         } catch (Exception e) {
@@ -124,7 +124,7 @@ public class CotacaoRepositoryImpl implements CotacaoRepository {
                 String pvp = tokens[3].isBlank() ? "0,00" : tokens[3];
 
                 this.cotacoes.put(ticker, new InfoAtivo(format.parse(cotacao).doubleValue(),
-                        TipoAtivo.FII, format.parse(dy).doubleValue(), null, format.parse(pvp).doubleValue()));
+                        TipoAtivo.FII, format.parse(pvp).doubleValue(), format.parse(dy).doubleValue(), null));
             }
 
         } catch (Exception e) {

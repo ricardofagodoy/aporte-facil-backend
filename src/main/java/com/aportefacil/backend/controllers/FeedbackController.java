@@ -29,7 +29,9 @@ public class FeedbackController {
     @RequestMapping(value = "/feedback", method = RequestMethod.POST)
     public ResponseEntity<Void> addFeedback(HttpSession session, @RequestBody String feedback) {
 
-        String id = (String) session.getAttribute(loggedField);
+        final var loggedSession = session.getAttribute(loggedField);
+
+        final String id = loggedSession != null ? loggedSession.toString() : "Anonymous";
 
         logger.info("Adding a new feedback with ID " + id);
 

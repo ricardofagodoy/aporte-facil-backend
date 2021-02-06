@@ -27,6 +27,10 @@ public class SecurityInterceptor implements HandlerInterceptor {
                              @Nonnull HttpServletResponse response,
                              @Nonnull Object handler) throws IOException {
 
+        if (request.getRequestURI().equals("/feedback")) {
+            return true;
+        }
+
         HttpSession session = request.getSession(false);
 
         // Not logged In
