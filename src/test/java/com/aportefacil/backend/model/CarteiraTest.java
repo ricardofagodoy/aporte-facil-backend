@@ -44,10 +44,10 @@ class CarteiraTest {
 
         carteira.balance();
 
-        assertEquals(carteira, new Carteira(1000.0, Arrays.asList(
+        assertTrue(carteira.equals(new Carteira(1000.0, Arrays.asList(
                 new Ativo("A", 0, 1d, new InfoAtivo(100d, null, null, null, null), 500d, 5, false),
                 new Ativo("B", 0, 1d, new InfoAtivo(100d, null, null, null, null), 500d, 5, false)
-        )));
+        ))));
     }
 
     @Test

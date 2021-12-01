@@ -35,11 +35,10 @@ dependencies {
 
 apply plugin: 'com.google.cloud.tools.appengine'
 
-appengine {  // App Engine tasks configuration
-    deploy {   // deploy configuration
-        projectId = 'GCLOUD_CONFIG' // gcloud config set project
-        version = 'GCLOUD_CONFIG'   // gcloud to generate a version
-    }
+jar {
+	manifest {
+		attributes 'Main-Class': 'com.aportefacil.backend.BackendApplication'
+	}
 }
 
 test {

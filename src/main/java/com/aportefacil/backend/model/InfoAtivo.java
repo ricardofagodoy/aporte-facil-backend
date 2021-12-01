@@ -1,5 +1,7 @@
 package com.aportefacil.backend.model;
 
+import java.util.Objects;
+
 public class InfoAtivo {
 
     private TipoAtivo tipo;
@@ -17,6 +19,23 @@ public class InfoAtivo {
         this.pvp = pvp;
         this.dy = dy;
         this.pl = pl;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InfoAtivo infoAtivo = (InfoAtivo) o;
+        return tipo == infoAtivo.tipo &&
+                Objects.equals(cotacao, infoAtivo.cotacao) &&
+                Objects.equals(pvp, infoAtivo.pvp) &&
+                Objects.equals(dy, infoAtivo.dy) &&
+                Objects.equals(pl, infoAtivo.pl);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tipo, cotacao, pvp, dy, pl);
     }
 
     public Double getCotacao() {
