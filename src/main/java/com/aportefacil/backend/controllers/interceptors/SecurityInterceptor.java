@@ -27,7 +27,7 @@ public class SecurityInterceptor implements HandlerInterceptor {
                              @Nonnull HttpServletResponse response,
                              @Nonnull Object handler) throws IOException {
 
-        if (request.getRequestURI().equals("/feedback")) {
+        if (request.getRequestURI().equals("/feedback") || request.getRequestURI().equals("/health")) {
             return true;
         }
 
