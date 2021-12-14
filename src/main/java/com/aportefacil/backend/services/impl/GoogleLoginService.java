@@ -42,4 +42,9 @@ public class GoogleLoginService implements LoginService {
             throw new RuntimeException("Fail to verify token");
         }
     }
+
+    @Override
+    public String getProvider() {
+        return "GOOGLE";
+    }
 }

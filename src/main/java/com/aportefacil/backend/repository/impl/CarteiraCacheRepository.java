@@ -63,7 +63,8 @@ public class CarteiraCacheRepository implements CarteiraRepository {
         System.out.println("Persisting carteira for " + this.write.size() + " records...");
         this.write.forEach(this.persistentRepository::updateCarteira);
 
-        System.out.println("Clearing write buffer...");
+        System.out.println("Clearing buffers...");
         this.write.clear();
+        this.read.clear();
     }
 }

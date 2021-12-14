@@ -39,6 +39,6 @@ public class CarteiraFirestoreRepository implements CarteiraRepository {
     }
 
     private DocumentSnapshot fetchCarteira(String id) throws Exception {
-        return this.collection.document(id).get().get(5, TimeUnit.SECONDS);
+        return this.collection.document(id).get().get(20, TimeUnit.SECONDS);
     }
 }
